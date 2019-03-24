@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Front End</title>
+  </head>
+  <body>
+    <h1>To Do App</h1>
+    <div class="newTask">
+      <h5>New Task</h5>
+
+      <input id="task" type="text" />
+    </div>
+    <div id="todos">
+      <ul id="list"></ul>
+    </div>
+  </body>
+  <script>
+    console.log("JS READY!");
+    $.ajax({
+      url: "./getData",
+      success: function(result) {
+        console.log(result);
+        result.forEach(element => {
+          $("#list").append(
+            `<li id="${element.id}">${element.task} <span onclick="deleteByID(${
+              element.id
+            })"">X</span></li>`
+          );
+        });
+      }
+    });
+
+    $("#task").change(event => {
+      console.log(event.currentTarget.value);
+      $.ajax({
+        url: "./addData/" + event.currentTarget.value,
+        success: function(result) {
+          location.reload();
+        }
+      });
+    });
+
+    let deleteByID = id => {
+      console.log("Deleting", id);
+      $.ajax({
+        url: "./deleteData/" + id,
+        success: function(result) {
+          location.reload();
+        }
+      });
+    };
+  </script>
+</html>
